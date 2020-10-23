@@ -1,6 +1,6 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Game } from 'src/app/models/Game';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { GamesService } from '../../services/games.service';
 
@@ -14,18 +14,35 @@ export class GameFormComponent implements OnInit {
   @HostBinding('class') classes = 'row';
 
   game:Game = {
-    id:0,
+    id: 0,
     title: '',
     description: '',
     image: '',
     createdAt: new Date()
   };
 
+  game1:any;
+
+  edit:boolean = false;
+
   gameMessage:any;
 
-  constructor(private gamesService:GamesService, private route:Router) { }
+  constructor(private gamesService:GamesService, private route:Router, private activatedRoute:ActivatedRoute) { }
 
   ngOnInit(): void {
+    const params = this.activatedRoute.snapshot.params;
+    if(params.id){
+      this.gamesService.getGame(params.id)
+        .subscribe(
+          resp => {
+            this.game1 = resp;
+            console.log(this.game1.game);
+            this.game = this.game1.game;
+            this.edit = true;
+          },
+          err => console.log(err)
+        );
+    }
   }
 
   saveNewGame(){
@@ -43,17 +60,27 @@ export class GameFormComponent implements OnInit {
             this.game.id = 0;
             this.game.createdAt = new Date();
           } else {
-            this.game = {
-              id:0,
-              title: '',
-              description: '',
-              image: '',
-              createdAt: new Date()
-            }
             this.route.navigate(['/games']);
           }
         },
         err => console.error(err)
       );
+  }
+
+  updateGame(){
+    delete this.game.createdAt;
+    this.gamesService.updateGame(this.game.id.toString(), this.game)
+      .subscribe(
+        resp => {
+          console.log(resp);
+          this.gameMessage = resp;
+          if(this.gameMessage.message.msgError){
+            console.log('AH PERRO NO TE GUARDO EN LA BASE DE DATOS POR CHISTOSITO');
+          } else {
+            this.route.navigate(['/games']);
+          }
+        },
+        err => console.error(err)
+      )
   }
 }

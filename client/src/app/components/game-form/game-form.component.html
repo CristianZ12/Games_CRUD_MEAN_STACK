@@ -3,16 +3,16 @@
         <div class="card-body">
             <form>
                 <div class="form-group">
-                    <input type="text" name="title" [(ngModel)]="game.title" placeholder="Title" class="form-control" value="{{game.title}}" autofocus>
+                    <input type="text" name="title" [(ngModel)]="game.title" placeholder="Title" class="form-control" autofocus>
                 </div>
                 <div class="form-group">
-                    <textarea name="description" [(ngModel)]="game.description" placeholder="Description" rows="2" class="form-control" value="{{game.description}}"></textarea>
+                    <textarea name="description" [(ngModel)]="game.description" placeholder="Description" rows="2" class="form-control"></textarea>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="image" [(ngModel)]="game.image" placeholder="Image" class="form-control" value="{{game.image}}">
+                    <input type="text" name="image" [(ngModel)]="game.image" placeholder="Image" class="form-control">
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-block btn-success" (click)="saveNewGame()">Save</button>
+                    <button class="btn btn-block btn-success" (click)="edit ? updateGame() : saveNewGame()">Save</button>
                 </div>
             </form>
         </div>

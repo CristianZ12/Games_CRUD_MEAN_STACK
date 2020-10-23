@@ -51,7 +51,7 @@ class GameControllers {
                     } });
             }
             else {
-                resp.status(200).json({ game });
+                resp.status(200).json({ game: game[0] });
             }
         });
     }
