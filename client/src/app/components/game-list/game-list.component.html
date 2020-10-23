@@ -2,7 +2,7 @@
     <div class="card text-center">
         <div class="card-header d-flex justify-content-between alaign-items-center">
             {{game.title}}
-            <button class="btn btn-danger">
+            <button class="btn btn-danger" (click)="deleteGame(game.id)">
                 <i class="fas fa-trash"></i>
             </button>
         </div>

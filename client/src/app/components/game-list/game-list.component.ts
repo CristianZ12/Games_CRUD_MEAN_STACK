@@ -1,5 +1,4 @@
-import { ThrowStmt } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, Host, HostBinding, OnInit } from '@angular/core';
 
 import { GamesService } from '../../services/games.service';
 
@@ -10,12 +9,18 @@ import { GamesService } from '../../services/games.service';
 })
 export class GameListComponent implements OnInit {
 
+  @HostBinding('class') classes = 'row';
+
   gamesObject:any;
   games:any = [];
 
   constructor( private GamesService:GamesService) { }
 
   ngOnInit(): void {
+    this.getGames();
+  }
+
+  getGames(){
     this.GamesService.getGames().subscribe(
       res => {
         this.gamesObject = res;
@@ -27,4 +32,14 @@ export class GameListComponent implements OnInit {
     );
   }
 
+  deleteGame(id:string){
+    this.GamesService.deleteGame(id)
+      .subscribe(
+        resp => {
+          console.log(resp);
+          this.getGames();
+        },
+        err => console.error(err)
+      );
+  }
 }
